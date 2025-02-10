@@ -1,0 +1,66 @@
+INSERT INTO authors (author_name)
+VALUES 
+('Arthur Conan Doyle'),
+('Agatha Christie'),
+('J.K. Rowling'),
+('George Orwell');
+SELECT * FROM LibraryManagement.authors;
+
+INSERT INTO users (user_name, email)
+VALUES
+('John Doe', 'john.doe@example.com'),
+('Jane Smith', 'jane.smith@example.com'),
+('Alice Johnson', 'alice.johnson@example.com'),
+('Bob Brown', 'bob.brown@example.com'),
+('Charlie Davis', 'charlie.davis@example.com');
+SELECT * FROM LibraryManagement.users;
+
+
+INSERT INTO genres (genre_name)
+VALUES
+('Mystery'),
+('Detective'),
+('Fantasy'),
+('Dystopian'),
+('Science Fiction'),
+('Adventure'),
+('Classic');
+SELECT * FROM LibraryManagement.genres;
+
+
+INSERT INTO books (title, publication_year, author_id, genre_id)
+VALUES 
+('A Study in Scarlet', 2024, 1, 2),
+('The Sign of the Four', 2024, 1, 2),
+('The Hound of the Baskervilles', 1902, 1, 2);
+INSERT INTO books (title, publication_year, author_id, genre_id)
+VALUES 
+('Murder on the Orient Express', 1924, 2, 2),
+('And Then There Were None', 1905, 2, 1),
+('The Murder of Roger Ackroyd', 1987, 2, 1);
+INSERT INTO books (title, publication_year, author_id, genre_id)
+VALUES 
+('1984', 1949, 4, 4),
+('Animal Farm', 1945, 4, 4);
+INSERT INTO books (title, publication_year, author_id, genre_id)
+VALUES 
+('Harry Potter and the Philosopher\'s Stone', 1997, 3, 3),
+('Harry Potter and the Chamber of Secrets', 1998, 3, 3),
+('Harry Potter and the Prisoner of Azkaban', 1999, 3, 3);
+SELECT * FROM LibraryManagement.books;
+
+
+
+INSERT INTO borrowed_books (book_id, user_id, borrow_date, return_date)
+VALUES
+(1, 1, '2025-02-01', '2025-02-10'), 
+(2, 2, '2025-01-20', '2025-02-05'), 
+(3, 3, '2025-01-15', '2025-01-25'); 
+INSERT INTO borrowed_books (book_id, user_id, borrow_date, return_date)
+VALUES
+(4, 4, '2025-02-08', NULL), 
+(5, 5, '2025-02-05', NULL), 
+(6, 1, '2025-02-03', NULL); 
+SELECT * FROM LibraryManagement.borrowed_books;
+
+
