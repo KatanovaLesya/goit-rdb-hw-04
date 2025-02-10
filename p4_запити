@@ -1,0 +1,104 @@
+1. Визначте, скільки рядків ви отримали (за допомогою оператора COUNT).
+
+SELECT COUNT(*) AS total_rows
+FROM orders o
+INNER JOIN customers c ON o.customer_id = c.id
+INNER JOIN employees e ON o.employee_id = e.employee_id
+INNER JOIN shippers s ON o.shipper_id = s.id
+INNER JOIN order_details od ON o.id = od.order_id
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories cat ON p.category_id = cat.id
+INNER JOIN suppliers sup ON p.supplier_id = sup.id;
+
+2. Змініть декілька операторів INNER на LEFT чи RIGHT. Визначте, що відбувається з кількістю рядків. Чому? Напишіть відповідь у текстовому файлі.
+
+Якщо змінити декілька рядків INNER на LEFT то нічого не змінеться:
+
+SELECT COUNT(*) AS total_rows
+FROM orders o
+LEFT JOIN customers c ON o.customer_id = c.id
+LEFT JOIN employees e ON o.employee_id = e.employee_id
+INNER JOIN shippers s ON o.shipper_id = s.id
+INNER JOIN order_details od ON o.id = od.order_id
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories cat ON p.category_id = cat.id
+INNER JOIN suppliers sup ON p.supplier_id = sup.id;
+
+Чому кількість рядків не змінилася:
+Якщо хоча б один із цих INNER JOIN не знаходить відповідність, відповідний рядок буде виключений.
+Використання LEFT JOIN для customers і employees дозволяє зберігати замовлення без відповідних клієнтів або працівників.
+Але якщо інші таблиці, з'єднані через INNER JOIN, не знаходять відповідності, ці рядки все одно виключаються.
+Усі INNER JOIN з інших таблиць (наприклад, shippers, order_details, products, categories, suppliers) зменшують кількість рядків до тих, які мають повну відповідність у всіх таблицях.
+
+А щоб перевірити роль INNER то можна зробити так:
+
+SELECT COUNT(*) AS total_rows
+FROM orders o
+LEFT JOIN customers c ON o.customer_id = c.id
+LEFT JOIN employees e ON o.employee_id = e.employee_id;
+
+Тоді кількість результатів зменьшиться, як видно на скрінах.
+
+3. Оберіть тільки ті рядки, де employee_id > 3 та ≤ 10.
+
+SELECT *
+FROM orders o
+LEFT JOIN customers c ON o.customer_id = c.id
+LEFT JOIN employees e ON o.employee_id = e.employee_id
+LEFT JOIN shippers s ON o.shipper_id = s.id
+LEFT JOIN order_details od ON o.id = od.order_id
+LEFT JOIN products p ON od.product_id = p.id
+LEFT JOIN categories cat ON p.category_id = cat.id
+LEFT JOIN suppliers sup ON p.supplier_id = sup.id
+WHERE o.employee_id > 3 AND o.employee_id <= 10;
+
+4. Згрупуйте за іменем категорії, порахуйте кількість рядків у групі, середню кількість товару (кількість товару знаходиться в order_details.quantity)
+
+SELECT 
+    cat.name AS category_name,
+    COUNT(*) AS row_count,
+    AVG(od.quantity) AS average_quantity
+FROM order_details od
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories cat ON p.category_id = cat.id
+GROUP BY cat.name;
+
+5. Відфільтруйте рядки, де середня кількість товару більша за 21.
+
+SELECT 
+    cat.name AS category_name,
+    COUNT(*) AS row_count,
+    AVG(od.quantity) AS average_quantity
+FROM order_details od
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories cat ON p.category_id = cat.id
+GROUP BY cat.name
+HAVING AVG(od.quantity) > 21;
+
+6. Відсортуйте рядки за спаданням кількості рядків.
+
+SELECT 
+    cat.name AS category_name,
+    COUNT(*) AS row_count,
+    AVG(od.quantity) AS average_quantity
+FROM order_details od
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories cat ON p.category_id = cat.id
+GROUP BY cat.name
+HAVING AVG(od.quantity) > 21
+ORDER BY row_count DESC;
+
+7. Виведіть на екран (оберіть) чотири рядки з пропущеним першим рядком.
+
+SELECT 
+    cat.name AS category_name,
+    COUNT(*) AS row_count,
+    AVG(od.quantity) AS average_quantity
+FROM order_details od
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories cat ON p.category_id = cat.id
+GROUP BY cat.name
+HAVING AVG(od.quantity) > 21
+ORDER BY row_count DESC
+LIMIT 4 OFFSET 1;
+
