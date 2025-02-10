@@ -1,0 +1,75 @@
+USE new_schema;
+
+ALTER TABLE customers
+ADD PRIMARY KEY (id);
+
+ALTER TABLE categories
+ADD PRIMARY KEY (id);
+
+ALTER TABLE employees
+ADD PRIMARY KEY (employee_id);
+
+ALTER TABLE order_details
+ADD PRIMARY KEY (id);
+
+ALTER TABLE orders
+ADD PRIMARY KEY (id);
+
+ALTER TABLE products
+ADD PRIMARY KEY (id);
+
+ALTER TABLE shippers
+ADD PRIMARY KEY (id);
+
+ALTER TABLE suppliers
+ADD PRIMARY KEY (id);
+
+ALTER TABLE orders
+ADD CONSTRAINT fk_orders_customers
+FOREIGN KEY (customer_id) REFERENCES customers(id);
+
+ALTER TABLE orders
+ADD CONSTRAINT fk_orders_employees
+FOREIGN KEY (employee_id) REFERENCES employees(employee_id);
+
+ALTER TABLE orders
+ADD CONSTRAINT fk_orders_shippers
+FOREIGN KEY (shipper_id) REFERENCES shippers(id);
+
+ALTER TABLE order_details
+ADD CONSTRAINT fk_order_details_orders
+FOREIGN KEY (order_id) REFERENCES orders(id);
+
+ALTER TABLE order_details
+ADD CONSTRAINT fk_order_details_products
+FOREIGN KEY (product_id) REFERENCES products(id);
+
+ALTER TABLE products
+ADD CONSTRAINT fk_products_categories
+FOREIGN KEY (category_id) REFERENCES categories(id);
+
+ALTER TABLE products
+ADD CONSTRAINT fk_products_suppliers
+FOREIGN KEY (supplier_id) REFERENCES suppliers(id);
+
+
+SELECT 
+    o.id AS order_id,
+    c.name AS customer_name,
+    e.first_name AS employee_first_name,
+    e.last_name AS employee_last_name,
+    s.name AS shipper_name,
+    p.name AS product_name,
+    cat.name AS category_name,
+    sup.name AS supplier_name,
+    od.quantity AS quantity_ordered,
+    od.id AS order_detail_id,
+    o.date AS order_date
+FROM orders o
+INNER JOIN customers c ON o.customer_id = c.id
+INNER JOIN employees e ON o.employee_id = e.employee_id
+INNER JOIN shippers s ON o.shipper_id = s.id
+INNER JOIN order_details od ON o.id = od.order_id
+INNER JOIN products p ON od.product_id = p.id
+INNER JOIN categories cat ON p.category_id = cat.id
+INNER JOIN suppliers sup ON p.supplier_id = sup.id;
